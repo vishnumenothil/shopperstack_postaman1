@@ -1,0 +1,1234 @@
+{
+	"info": {
+		"_postman_id": "be3a72bf-32f7-4ae0-b74b-f5d578a584a7",
+		"name": "shopper",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36774577"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "shopperloger",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"\r",
+									"});\r",
+									"pm.test(\"Response time is less than 500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Your email \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.email).to.eql( pm.globals.get(\"email\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Your role name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.role).to.eql(\"SHOPPER\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"body = JSON.parse(responseBody)\r",
+									"\r",
+									"pm.globals.set(\"shopperid\", body.data.userId);\r",
+									"pm.globals.set(\"token\", body.data.jwtToken);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\":\"{{pass}}\",\r\n  \"role\": \"SHOPPER\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/users/login",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "viewproduct",
+			"item": [
+				{
+					"name": "viewdefaultproduct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 2000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"body=JSON.parse(responseBody)\r",
+									"pm.globals.set(\"productid\", body.data[14].productId);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/products/alpha",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"products",
+								"alpha"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "whishlist",
+			"item": [
+				{
+					"name": "addproducttowhishlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"checking whether is that the same product id added to whislist or not \", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.productId).to.eql(pm.globals.get(\"productid\"));\r",
+									"\r",
+									"});\r",
+									"//and here we are extracting the id of the product \r",
+									"//this is help for the other operations\r",
+									"\r",
+									"\r",
+									"//here we are using the shopperid to identify in which users carts we want to add the items\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": {{productid}},\r\n  \"quantity\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/wishlist",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"wishlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getproductfromwishlist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/wishlist",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"wishlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteproductfromwhislist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}//shoppers/{{shopperid}}/wishlist/{{productid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"",
+								"shoppers",
+								"{{shopperid}}",
+								"wishlist",
+								"{{productid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cart",
+			"item": [
+				{
+					"name": "addtocart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2500);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.productId).to.eql(pm.globals.get(\"productid\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"body=JSON.parse(responseBody)\r",
+									"pm.globals.set(\"itemid\", body.data.itemId);\r",
+									"\r",
+									"// here extracting the itemId"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": {{productid}},\r\n  \"quantity\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}//shoppers/{{shopperid}}/carts",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"",
+								"shoppers",
+								"{{shopperid}}",
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getitemfromcart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}//shoppers/{{shopperid}}/carts",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"",
+								"shoppers",
+								"{{shopperid}}",
+								"carts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatecarts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.itemId).to.eql(pm.globals.get(\"itemid\"));\r",
+									"\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"checking quantity\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.quantity).to.eql(3);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\":{{productid}},\r\n  \"quantity\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/carts/{{itemid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"carts",
+								"{{itemid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "address",
+			"item": [
+				{
+					"name": "addnewaddress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1120);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"body=JSON.parse(responseBody)\r",
+									"pm.globals.set(\"addressid\",body.data.addressId)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"addressId\": 123,\r\n  \"buildingInfo\": \"anand building\",\r\n  \"city\": \"tirur\",\r\n  \"country\": \"india\",\r\n  \"landmark\": \"no lamdmark\",\r\n  \"name\": \"manu\",\r\n  \"phone\": \"7808628067\",\r\n  \"pincode\": \"560010\",\r\n  \"state\": \"kerala\",\r\n  \"streetInfo\": \"basvanagudi\",\r\n  \"type\": \"home\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}\\/shoppers/{{shopperid}}/address",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"",
+								"shoppers",
+								"{{shopperid}}",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getalladdress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/address",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getaperticularaddress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"});\r",
+									"pm.test(\"checking the addressid\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.addressId).to.eql(pm.globals.get(\"addressid\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/address/{{addressid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"address",
+								"{{addressid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateaddress",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1120);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.name).to.eql(\"amit\");\r",
+									"});\r",
+									"    pm.test(\"Your phone name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.phone).to.eql(\"896541254\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n  \"addressId\": 123,\r\n  \"buildingInfo\": \"anand building\",\r\n  \"city\": \"jayagar\",\r\n  \"country\": \"india\",\r\n  \"landmark\": \"no lamdmark\",\r\n  \"name\": \"amit\",\r\n  \"phone\": \"896541254\",\r\n  \"pincode\": \"560010\",\r\n  \"state\": \"kerala\",\r\n  \"streetInfo\": \"basvanagudi\",\r\n  \"type\": \"home\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/address/{{addressid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"address",
+								"{{addressid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "placeorder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"body=JSON.parse(responseBody)\r",
+									"pm.globals.set(\"orderid\",body.data.orderId)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": {\r\n    \"addressId\": {{addressid}},\r\n    \"buildingInfo\": \"string\",\r\n    \"city\": \"string\",\r\n    \"country\": \"string\",\r\n    \"landmark\": \"string\",\r\n    \"name\": \"string\",\r\n    \"phone\": \"string\",\r\n    \"pincode\": \"string\",\r\n    \"state\": \"string\",\r\n    \"streetInfo\": \"string\",\r\n    \"type\": \"string\"\r\n  },\r\n  \"paymentMode\": \"COD\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/orders",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getorderhistory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/orders",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateorder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"pm.test(\"ORDER STATUS\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.orderStatus).to.eql(\"DELIVERED\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/orders/{{orderid}}?status=DELIVERED",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"orders",
+								"{{orderid}}"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "DELIVERED"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INVOICE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/orders/{{orderid}}/invoice",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"orders",
+								"{{orderid}}",
+								"invoice"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "review",
+			"item": [
+				{
+					"name": "addreview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"body=pm.response.json()\r",
+									"console.log(body)\r",
+									"pm.globals.set(\"reviewid\", body.data.reviewId);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"very handy capturing beatifull photos\",\r\n  \"heading\": \"amazing product\",\r\n  \"rating\": 4,\r\n  \"shopperId\":{{shopperid}},\r\n  \"shopperName\": \"RP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/reviews?productId={{productid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"reviews"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{productid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getreview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/reviews/{{productid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"reviews",
+								"{{productid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatereview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"description\": \"it is not worth for the money the clothes is not good\",\r\n  \"heading\": \"bad product\",\r\n  \"rating\": 2,\r\n  \"shopperId\":{{shopperid}},\r\n  \"shopperName\": \"RP\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/reviews/{{reviewid}}?productId={{productid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"reviews",
+								"{{reviewid}}"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{productid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletereview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/reviews/{{reviewid}}?productId={{productid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"reviews",
+								"{{reviewid}}"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "{{productid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "deleteaddress",
+			"item": [
+				{
+					"name": "deleteaddressid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/shoppers/{{shopperid}}/address/{{addressid}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"shoppers",
+								"{{shopperid}}",
+								"address",
+								"{{addressid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
